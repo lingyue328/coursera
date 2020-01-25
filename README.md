@@ -1,2 +1,6 @@
 # coursera
-useful ipynb
+Finished:
+deeplearning.ai1
+
+Learning:
+deeplearning.ai5
