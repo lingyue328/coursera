@@ -5,7 +5,8 @@
 
 #define MAXLINE 40 /* 40 chars per line, per command, is enough. */
 
-char command[200];
+
+char terminal[200];
 int numOfCmd = 0;
 /** The setup() routine reads in the next command line string storing it in the input buffer.
 The line is separated into distinct tokens using whitespace as delimiters.  Setup also 
@@ -37,54 +38,35 @@ void setup(char inputBuff[], char *args[],int *background)
 	
     if (strncmp(inputBuff, "rr", 2) == 0){
             memset(inputBuff, 0, sizeof(inputBuff));
-            strcpy(inputBuff, commandHistory[numOfCmd - 1]);
-        if ((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0)){
-            int top;
-            if (numberOfCommands < 5){
-                top = numOfCmd;
-            }
-            else{
-                top = 5;
-            }
-
-            int a = 0;
-            while (a < top){
-		ba = a + 1;
-                printf("Command #%d: %s\n", ba, &(command + 40*a));
-                a++;
-            }
-        }       
+            strncpy(inputBuff, (terminal + (40*(numOfCmd-1))), 40);
+		
+		system(inputBuff);
+                                                             
     }
     else if(strncmp(inputBuff, "r", 1) == 0){
         if(length < 4){ // For r0 through r9
             int commandNum = inputBuff[1] - '0';
+	    commandNum --;
             memset(inputBuff, 0, sizeof(inputBuff));
-            strcpy(inputBuff, &(command + 40*commandNum));
+            strncpy(inputBuff, (terminal + 40*commandNum), 40);
+
+		system(inputBuff);
         }
-        if ((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0)){
-            int top;
-            if (numberOfCommands < 5){
-                top = numOfCmd;
-            }
-            else{
-                top = 5;
-            }
-
-            int a = 0;
-            while (a < top){
-		ba = a + 1;
-                printf("Command #%d: %s\n", ba, &(command + 40*a));
-                a++;
-            }
-        }  
-    }
-
-    if (!((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0))){
+        
+    }else if (!((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0))){
 
         // Add the Command to history
-        memset((command[(numOfCmd % 5)*40]), 0, 40);
-        strcpy(command[(numOfCmd % 5)*40]), inputBuff);
+    	if(numOfCmd == 5){
+		numOfCmd --;
+		strncpy(terminal, (terminal + 40), 160);
+	}
+        memset(terminal+numOfCmd*40, 0, 40);
+
+	strncpy(terminal+numOfCmd*40, inputBuff, 40);
+	
+	
         ++numOfCmd;
+	
     }
 	
     /* Examine every character in the input buffer */
@@ -134,7 +116,7 @@ int main(void)
     int background;         /* Equals 1 if a command is followed by '&', else 0 */
     
 
-    strcpy(command,"");
+    strcpy(terminal,"");
 
 
     while (1){            /* Program terminates normally inside setup */
@@ -149,7 +131,7 @@ int main(void)
   
 	 if ((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0)){
             int top;
-            if (numberOfCommands < 5){
+            if (numOfCmd < 5){
                 top = numOfCmd;
             }
             else{
@@ -158,8 +140,8 @@ int main(void)
 
             int a = 0;
             while (a < top){
-		ba = a + 1;
-                printf("Command #%d: %s\n", ba, &(command + 40*a));
+		int ba = a + 1;
+                printf("Command #%d: %s\n", ba, (terminal + 40*a));
                 a++;
             }
         }  
