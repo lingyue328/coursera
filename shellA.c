@@ -76,6 +76,14 @@ void setup(char inputBuff[], char *args[],int *background)
             }
         }  
     }
+
+    if (!((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0))){
+
+        // Add the Command to history
+        memset((command[(numOfCmd % 5)*40]), 0, 40);
+        strcpy(command[(numOfCmd % 5)*40]), inputBuff);
+        ++numOfCmd;
+    }
 	
     /* Examine every character in the input buffer */
     for (i = 0; i < length; i++) {
