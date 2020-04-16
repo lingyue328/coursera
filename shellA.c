@@ -49,7 +49,8 @@ void setup(char inputBuff[], char *args[],int *background)
 
             int a = 0;
             while (a < top){
-                printf("Command #%d: %s\n", a, &(command + 40*a));
+		ba = a + 1;
+                printf("Command #%d: %s\n", ba, &(command + 40*a));
                 a++;
             }
         }       
@@ -71,7 +72,8 @@ void setup(char inputBuff[], char *args[],int *background)
 
             int a = 0;
             while (a < top){
-                printf("Command #%d: %s\n", a, &(command + 40*a));
+		ba = a + 1;
+                printf("Command #%d: %s\n", ba, &(command + 40*a));
                 a++;
             }
         }  
@@ -156,7 +158,8 @@ int main(void)
 
             int a = 0;
             while (a < top){
-                printf("Command #%d: %s\n", a, &(command + 40*a));
+		ba = a + 1;
+                printf("Command #%d: %s\n", ba, &(command + 40*a));
                 a++;
             }
         }  
