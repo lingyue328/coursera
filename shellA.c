@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #define MAXLINE 40 /* 40 chars per line, per command, is enough. */
 
+char command[200];
+int numOfCmd = 0;
 /** The setup() routine reads in the next command line string storing it in the input buffer.
 The line is separated into distinct tokens using whitespace as delimiters.  Setup also 
 modifies the args parameter so that it holds points to the null-terminated strings  which 
@@ -31,7 +34,49 @@ void setup(char inputBuff[], char *args[],int *background)
         perror("error reading command");
 	exit(-1);           /* Terminate with error code of -1 */
     }
-    
+	
+    if (strncmp(inputBuff, "rr", 2) == 0){
+            memset(inputBuff, 0, sizeof(inputBuff));
+            strcpy(inputBuff, commandHistory[numOfCmd - 1]);
+        if ((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0)){
+            int top;
+            if (numberOfCommands < 5){
+                top = numOfCmd;
+            }
+            else{
+                top = 5;
+            }
+
+            int a = 0;
+            while (a < top){
+                printf("Command #%d: %s\n", a, &(command + 40*a));
+                a++;
+            }
+        }       
+    }
+    else if(strncmp(inputBuff, "r", 1) == 0){
+        if(length < 4){ // For r0 through r9
+            int commandNum = inputBuff[1] - '0';
+            memset(inputBuff, 0, sizeof(inputBuff));
+            strcpy(inputBuff, &(command + 40*commandNum));
+        }
+        if ((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0)){
+            int top;
+            if (numberOfCommands < 5){
+                top = numOfCmd;
+            }
+            else{
+                top = 5;
+            }
+
+            int a = 0;
+            while (a < top){
+                printf("Command #%d: %s\n", a, &(command + 40*a));
+                a++;
+            }
+        }  
+    }
+	
     /* Examine every character in the input buffer */
     for (i = 0; i < length; i++) {
  
@@ -79,6 +124,9 @@ int main(void)
     int background;         /* Equals 1 if a command is followed by '&', else 0 */
     
 
+    strcpy(command,"");
+
+
     while (1){            /* Program terminates normally inside setup */
 
 	background = 0;
@@ -89,6 +137,23 @@ int main(void)
 
         setup(inputBuff, args, &background);       /* Get next command */
   
+	 if ((strncmp(inputBuff, "history", 7) == 0) || (strncmp(inputBuff, "h", 1) == 0)){
+            int top;
+            if (numberOfCommands < 5){
+                top = numOfCmd;
+            }
+            else{
+                top = 5;
+            }
+
+            int a = 0;
+            while (a < top){
+                printf("Command #%d: %s\n", a, &(command + 40*a));
+                a++;
+            }
+        }  
+	    
+	    
 	pid = fork();
 	 
  	if (pid == 0) execvp(args[0], args);
