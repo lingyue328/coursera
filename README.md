@@ -1,6 +1,8 @@
 # coursera
 Finished:
-deeplearning.ai1
+deeplearning.ai 1 2 4 5
 
 Learning:
-deeplearning.ai5
+deeplearning.ai GAN
+
+
